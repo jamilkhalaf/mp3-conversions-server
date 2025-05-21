@@ -3,29 +3,30 @@ import os
 import subprocess
 import uuid
 import re
+import sys
 
 app = Flask(__name__)
 DOWNLOAD_FOLDER = "downloads"
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
+def install_ytdlp():
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", "--upgrade", "yt-dlp"], check=True)
+        print("yt-dlp installed successfully")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install yt-dlp: {e}")
+        raise Exception("Failed to install yt-dlp")
+
 def sanitize_filename(name):
     return re.sub(r'[^\w\-_\. ]', '_', name)
 
 def download_audio(url):
-    # Use yt-dlp to extract title first
-    title_cmd = [
-        "yt-dlp",
-        "--get-title",
-        "--no-warnings",
-        url
-    ]
-    try:
-        title_result = subprocess.run(title_cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        raw_title = title_result.stdout.decode().strip()
-        safe_title = sanitize_filename(raw_title) + ".mp3"
-    except subprocess.CalledProcessError as e:
-        raise Exception("Failed to retrieve title")
-
+    # Ensure yt-dlp is installed
+    install_ytdlp()
+    
+    # Generate a unique filename
+    unique_id = str(uuid.uuid4())
+    safe_title = f"audio_{unique_id}.mp3"
     output_path = os.path.join(DOWNLOAD_FOLDER, safe_title)
 
     command = [
@@ -39,11 +40,14 @@ def download_audio(url):
 
     try:
         print(f"Downloading: {url}")
-        subprocess.run(command, check=True)
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        print(f"Download output: {result.stdout}")
+        if result.stderr:
+            print(f"Download errors: {result.stderr}")
         return safe_title
     except subprocess.CalledProcessError as e:
-        raise Exception("Download failed")
-
+        print(f"Download error: {e.stderr}")
+        raise Exception(f"Download failed: {e.stderr}")
 
 @app.route("/download", methods=["POST"])
 def handle_download():
@@ -56,6 +60,7 @@ def handle_download():
         filename = download_audio(url)
         return jsonify({"file": filename})
     except Exception as e:
+        print(f"Error in handle_download: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/file/<filename>")
@@ -66,4 +71,6 @@ def serve_file(filename):
         return jsonify({"error": "File not found"}), 404
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5050)
+    import os
+    port = int(os.environ.get("PORT", 5050))
+    app.run(host="0.0.0.0", port=port)
