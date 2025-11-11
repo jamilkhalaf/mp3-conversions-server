@@ -1,0 +1,42 @@
+nohup: server.py: No such file or directory
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5050
+ * Running on http://192.168.86.23:5050
+Press CTRL+C to quit
+100.81.231.50 - - [20/Aug/2025 23:43:39] "GET /files/ HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:43:40] "GET /files/ HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:43:42] "GET /download-file//Screenshot%202025-08-20%20at%2011.28.21 PM%20(2).png HTTP/1.1" 308 -
+100.81.231.50 - - [20/Aug/2025 23:43:42] "GET /download-file/Screenshot%202025-08-20%20at%2011.28.21 PM%20(2).png HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:43:46] "GET /download-file/Screenshot%202025-08-20%20at%2011.28.21 PM%20(2).png HTTP/1.1" 304 -
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5050
+ * Running on http://192.168.86.23:5050
+Press CTRL+C to quit
+100.81.231.50 - - [20/Aug/2025 23:46:33] "GET /files/ HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:46:35] "GET /download-file//BYU%20transcript.pdf HTTP/1.1" 308 -
+100.81.231.50 - - [20/Aug/2025 23:46:35] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:46:39] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 304 -
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5050
+ * Running on http://192.168.86.23:5050
+Press CTRL+C to quit
+100.81.231.50 - - [20/Aug/2025 23:55:41] "GET /files/ HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:56:37] "GET /files/ HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:56:38] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:56:46] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:56:47] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:56:57] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 304 -
+100.81.231.50 - - [20/Aug/2025 23:57:01] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 304 -
+100.81.231.50 - - [20/Aug/2025 23:57:04] "GET /apple-touch-icon-precomposed.png HTTP/1.1" 404 -
+100.81.231.50 - - [20/Aug/2025 23:57:04] "GET /apple-touch-icon.png HTTP/1.1" 404 -
+100.81.231.50 - - [20/Aug/2025 23:57:04] "GET /favicon.ico HTTP/1.1" 404 -
+100.81.231.50 - - [20/Aug/2025 23:57:04] "GET /download-file/BYU%20transcript.pdf HTTP/1.1" 200 -

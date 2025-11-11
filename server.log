@@ -1,0 +1,23 @@
+ * Serving Flask app 'server'
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5050
+ * Running on http://192.168.86.23:5050
+Press CTRL+C to quit
+100.81.231.50 - - [20/Aug/2025 23:22:58] "GET /files/ HTTP/1.1" 404 -
+[youtube] Extracting URL: https://www.youtube.com/embed/x1ZtIVuHph0?playsinline=1
+[youtube] x1ZtIVuHph0: Downloading webpage
+[youtube] x1ZtIVuHph0: Downloading tv client config
+[youtube] x1ZtIVuHph0: Downloading player 3d3ba064-main
+[youtube] x1ZtIVuHph0: Downloading tv player API JSON
+[youtube] x1ZtIVuHph0: Downloading ios player API JSON
+[youtube] x1ZtIVuHph0: Downloading m3u8 information
+[info] x1ZtIVuHph0: Downloading 1 format(s): 251
+[download] Destination: downloads/Miyagi _ Andy Panda - Kosandra _Official Audio_.webm
+[download]   0.0% of    3.48MiB at  395.58KiB/s ETA 00:09[download]   0.1% of    3.48MiB at    1.02MiB/s ETA 00:03[download]   0.2% of    3.48MiB at    2.23MiB/s ETA 00:01[download]   0.4% of    3.48MiB at    4.53MiB/s ETA 00:00[download]   0.9% of    3.48MiB at    1.36MiB/s ETA 00:02[download]   1.8% of    3.48MiB at    1.55MiB/s ETA 00:02[download]   3.6% of    3.48MiB at    2.16MiB/s ETA 00:01[download]   7.2% of    3.48MiB at    3.21MiB/s ETA 00:01[download]  14.4% of    3.48MiB at    5.11MiB/s ETA 00:00[download]  28.7% of    3.48MiB at    8.19MiB/s ETA 00:00[download]  57.5% of    3.48MiB at   13.37MiB/s ETA 00:00[download] 100.0% of    3.48MiB at   19.84MiB/s ETA 00:00[download] 100% of    3.48MiB in 00:00:00 at 11.02MiB/s  
+[ExtractAudio] Destination: downloads/Miyagi _ Andy Panda - Kosandra _Official Audio_.mp3
+Deleting original file downloads/Miyagi _ Andy Panda - Kosandra _Official Audio_.webm (pass -k to keep)
+100.81.231.50 - - [20/Aug/2025 23:24:20] "POST /download HTTP/1.1" 200 -
+100.81.231.50 - - [20/Aug/2025 23:24:20] "GET /file/Miyagi%20_%20Andy%20Panda%20-%20Kosandra%20_Official%20Audio_.mp3 HTTP/1.1" 200 -
+Downloading: https://www.youtube.com/embed/x1ZtIVuHph0?playsinline=1
