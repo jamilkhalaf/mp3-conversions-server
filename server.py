@@ -11,6 +11,9 @@ app = Flask(__name__)
 DOWNLOAD_FOLDER = os.path.expanduser("~/Desktop/songs")
 os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
+VIDEO_DOWNLOAD_FOLDER = os.path.expanduser("~/Downloads")
+os.makedirs(VIDEO_DOWNLOAD_FOLDER, exist_ok=True)
+
 # Define the restricted screenshots folder path
 SCREENSHOTS_FOLDER = os.path.expanduser("~/Pictures")
 
@@ -63,6 +66,45 @@ def get_file_info(file_path):
     except Exception as e:
         print(f"Error getting file info for {file_path}: {e}")
         return None
+    
+def download_mp4(url):
+    # Get title first
+    title_cmd = [
+        "yt-dlp",
+        "--get-title",
+        "--no-warnings",
+        url
+    ]
+
+    try:
+        result = subprocess.run(
+            title_cmd, check=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE
+        )
+        raw_title = result.stdout.decode().strip()
+        safe_title = sanitize_filename(raw_title) + ".mp4"
+    except subprocess.CalledProcessError:
+        raise Exception("Failed to retrieve video title")
+
+    output_path = os.path.join(VIDEO_DOWNLOAD_FOLDER, safe_title)
+
+    command = [
+        "yt-dlp",
+        "-f bv*+ba/best",
+        "-N", "8",
+        "--no-write-thumbnail",
+        "--no-write-info-json",
+        "--no-warnings",
+        "-o", output_path,
+        url
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+        return safe_title
+    except subprocess.CalledProcessError:
+        raise Exception("MP4 download failed")
+
 
 def is_safe_path(path):
     """Check if the path is safe to access (only within screenshots folder)"""
@@ -101,6 +143,85 @@ def handle_download():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+@app.route("/download-mp4", methods=["POST"])
+def handle_mp4_download():
+    url = None
+    if request.is_json:
+        data = request.get_json(silent=True) or {}
+        url = data.get("url")
+    else:
+        url = request.form.get("url")
+
+    if not url:
+        return jsonify({"error": "URL is required"}), 400
+
+    try:
+        filename = download_mp4(url)
+        return jsonify({
+            "file": filename,
+            "saved_to": VIDEO_DOWNLOAD_FOLDER
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/mp4", methods=["GET"])
+def mp4_page():
+    return """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>MP4 Downloader</title>
+  <style>
+    body { font-family: -apple-system,BlinkMacSystemFont; background:#f5f5f7; }
+    .wrap { max-width: 720px; margin: 40px auto; background:#fff; padding:24px;
+            border-radius:14px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+    h1 { margin-top:0; }
+    input { width:100%; padding:14px; font-size:16px; border-radius:10px;
+            border:1px solid #ddd; }
+    button { margin-top:14px; padding:12px 18px; border-radius:10px;
+             border:0; background:#007aff; color:white; font-size:15px; cursor:pointer; }
+    .status { margin-top:14px; font-size:14px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🎬 MP4 Downloader</h1>
+    <p>Downloads MP4 video directly to <code>~/Downloads</code> on this Mac.</p>
+
+    <input id="url" placeholder="https://www.youtube.com/watch?v=..." />
+    <button onclick="go()">Download MP4</button>
+
+    <div class="status" id="status"></div>
+  </div>
+
+<script>
+async function go() {
+  const url = document.getElementById('url').value.trim();
+  const status = document.getElementById('status');
+  if (!url) { status.textContent = "Paste a URL."; return; }
+
+  status.textContent = "Downloading…";
+
+  try {
+    const r = await fetch('/download-mp4', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "Failed");
+
+    status.textContent = "Saved to Downloads: " + d.file;
+  } catch (e) {
+    status.textContent = "Error: " + e.message;
+  }
+}
+</script>
+</body>
+</html>
+"""
 
 @app.route("/file/<filename>")
 def serve_file(filename):
